@@ -1,36 +1,21 @@
 import asyncio
 import logging
+import os
 from aiogram import Bot, Dispatcher, types
 from aiogram.filters import Command
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from aiohttp import ClientSession
-from aiohttp_socks import ProxyConnector, ProxyType
 
-API_URL = "http://127.0.0.1:8000"
+# URL твоего backend на Vercel
+API_URL = os.getenv("API_URL", "https://art-nine-kappa.vercel.app")
 
-# Токен от @BotFather
-BOT_TOKEN = "8936427601:AAHVReHJOJKNjt1krQJrLsOQEbVSh5dly18"
-
-# Прокси для обхода блокировки Telegram
-PROXY_HOST = '185.196.61.251'
-PROXY_PORT = 1080
-PROXY_TYPE = ProxyType.SOCKS5
+BOT_TOKEN = os.getenv("8936427601:AAHVReHJOJKNjt1krQJrLsOQEbVSh5dly18")
 
 logging.basicConfig(level=logging.INFO)
-
-# Создаём сессию с прокси
-connector = ProxyConnector(
-    proxy_type=PROXY_TYPE,
-    host=PROXY_HOST,
-    port=PROXY_PORT,
-)
-session = ClientSession(connector=connector)
-
-bot = Bot(token=BOT_TOKEN, session=session)
+bot = Bot(token=BOT_TOKEN)
 dp = Dispatcher()
 
 
-# Клавиатура с работами
 def get_works_keyboard(works):
     keyboard = []
     for work in works[:10]:
@@ -67,7 +52,7 @@ async def cmd_works(message: types.Message):
         return
     
     await message.answer(
-        f"🎨 Доступно работ: {len(works)}\n\nВыбери картину:",
+        f" Доступно работ: {len(works)}\n\nВыбери картину:",
         reply_markup=get_works_keyboard(works)
     )
 
@@ -87,7 +72,7 @@ async def process_work(callback: types.CallbackQuery):
             f"🎨 **{work['title']}**\n\n"
             f"📐 {work['technique']}\n"
             f"💰 **Цена: {work['price']:,} ₽**\n\n"
-            f"📝 {work.get('description', 'Описание отсутствует')}\n\n"
+            f" {work.get('description', 'Описание отсутствует')}\n\n"
             f"✅ Доступна к покупке"
         ),
         parse_mode="Markdown",
