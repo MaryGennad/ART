@@ -284,10 +284,11 @@
   <button id="maxButton" onclick="openMaxChat()">💬</button>
 
   <script>
-    // API URL
-    const API_URL = 'http://127.0.0.1:8000/api/works';
+    // API URL (теперь на Vercel)
+    const API_URL = 'https://art-nine-kappa.vercel.app/api/works';
+    const CONTACT_URL = 'https://art-nine-kappa.vercel.app/api/contact';
     
-    // Fallback данные (если API не работает)
+    // Fallback данные
     const fallbackArtworks = [
       {
         title: "Утро в деревне",
@@ -327,7 +328,6 @@
       }
     ];
 
-    // Функция рендеринга галереи
     function renderGallery(artworks) {
       const gallery = document.getElementById('gallery');
       gallery.innerHTML = '';
@@ -347,13 +347,11 @@
       });
     }
 
-    // Загрузка работ из API
     async function loadWorks() {
       try {
         const response = await fetch(API_URL);
         const works = await response.json();
         
-        // Форматируем данные из API
         const formattedWorks = works.map(w => ({
           title: w.title,
           technique: w.technique,
@@ -368,11 +366,9 @@
         console.log('⚠️ API недоступен, используем локальные данные');
       }
       
-      // Fallback
       renderGallery(fallbackArtworks);
     }
 
-    // Загружаем при старте
     loadWorks();
 
     // Макс-мессенджер
@@ -411,9 +407,8 @@
       addUserMessage(message);
       input.value = '';
 
-      // Отправка на сервер
       try {
-        const response = await fetch('http://127.0.0.1:8000/api/contact', {
+        const response = await fetch(CONTACT_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -432,11 +427,10 @@
       }
     }
 
-    // Отправка по Enter
     document.getElementById('maxInput')?.addEventListener('keypress', function(e) {
       if (e.key === 'Enter') sendMessage();
     });
-  </script>
+</script>
   
 </body>
 </html>
