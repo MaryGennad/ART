@@ -1,10 +1,10 @@
 [project]
-name = "maria-art-api"
+name = "maria-art"
 version = "0.1.0"
-description = "Maria Art Portfolio API"
 requires-python = ">=3.12"
 dependencies = [
-    "fastapi>=0.115.0",
-    "uvicorn>=0.30.0",
-    "pydantic>=2.9.0",
+    "fastapi",
+    "uvicorn",
+    "pydantic",
+    "python-multipart"
 ]
