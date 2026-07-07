@@ -1,7 +1,16 @@
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 from contextlib import asynccontextmanager
+from fastapi.responses import HTMLResponse
 import os
+
+@app.get("/")
+async def root():
+    # Читаем index.html и возвращаем его
+    html_path = os.path.join(os.path.dirname(__file__), '..', 'index.html')
+    with open(html_path, 'r', encoding='utf-8') as f:
+        html_content = f.read()
+    return HTMLResponse(content=html_content)
 
 # База данных (пока тестовые данные)
 WORKS_DB = [
